@@ -661,6 +661,7 @@ dependencies = [
     { name = "fastmcp" },
     { name = "httpx" },
     { name = "livekit-agents", extra = ["deepgram", "groq", "openai", "sarvam", "silero"] },
+    { name = "livekit-api" },
     { name = "livekit-plugins-google" },
     { name = "python-dotenv" },
 ]
@@ -670,6 +671,7 @@ requires-dist = [
     { name = "fastmcp" },
     { name = "httpx" },
     { name = "livekit-agents", extras = ["deepgram", "groq", "openai", "sarvam", "silero"], specifier = ">=1.5.1" },
+    { name = "livekit-api", specifier = ">=1.0.0" },
     { name = "livekit-plugins-google", specifier = ">=1.5.1" },
     { name = "python-dotenv" },
 ]

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F.R.I.D.A.Y. — AI Voice Assistant</title>
+    <meta name="description" content="F.R.I.D.A.Y. — An Iron Man-style AI voice assistant powered by LiveKit, Groq, and Sarvam AI">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Ambient background effects -->
+    <div class="ambient-bg">
+        <div class="grid-overlay"></div>
+        <div class="particle-field" id="particleField"></div>
+        <div class="radial-glow"></div>
+    </div>
+
+    <!-- Top bar -->
+    <header class="top-bar">
+        <div class="top-bar__left">
+            <div class="logo-mark">
+                <svg viewBox="0 0 32 32" class="logo-svg">
+                    <polygon points="16,2 28,10 28,22 16,30 4,22 4,10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                    <polygon points="16,7 23,12 23,20 16,25 9,20 9,12" fill="none" stroke="currentColor" stroke-width="1"/>
+                    <circle cx="16" cy="16" r="3" fill="currentColor" opacity="0.8"/>
+                </svg>
+            </div>
+            <div class="top-bar__title">
+                <span class="title-main">F.R.I.D.A.Y.</span>
+                <span class="title-sub">Female Replacement Intelligent Digital Assistant Youth</span>
+            </div>
+        </div>
+        <div class="top-bar__right">
+            <div class="status-chip" id="connectionChip">
+                <span class="status-chip__dot"></span>
+                <span class="status-chip__text">Disconnected</span>
+            </div>
+            <button class="settings-btn" id="settingsBtn" title="Settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main layout -->
+    <main class="app-layout">
+        <!-- LEFT: Chat transcript -->
+        <section class="chat-panel" id="chatPanel">
+            <div class="panel-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="panel-icon">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                <h2>Transcript</h2>
+                <button class="clear-btn" id="clearChatBtn" title="Clear transcript">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-empty">
+                    <div class="chat-empty__icon">
+                        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1">
+                            <circle cx="24" cy="24" r="20" opacity="0.3"/>
+                            <circle cx="24" cy="24" r="12" opacity="0.5"/>
+                            <circle cx="24" cy="24" r="4" fill="currentColor" opacity="0.6"/>
+                        </svg>
+                    </div>
+                    <p>Connect to begin your session with F.R.I.D.A.Y.</p>
+                </div>
+            </div>
+            <!-- Text input for chat -->
+            <div class="chat-input-area" id="chatInputArea">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type a message..." disabled />
+                <button class="chat-send-btn" id="chatSendBtn" disabled title="Send message">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- CENTER: Arc Reactor / Visualizer -->
+        <section class="center-stage">
+            <div class="reactor-container" id="reactorContainer">
+                <!-- Canvas for audio visualization -->
+                <canvas id="reactorCanvas" width="400" height="400"></canvas>
+                <!-- Layered reactor rings -->
+                <div class="reactor-core">
+                    <div class="reactor-ring reactor-ring--outer"></div>
+                    <div class="reactor-ring reactor-ring--mid"></div>
+                    <div class="reactor-ring reactor-ring--inner"></div>
+                    <div class="reactor-glow"></div>
+                    <!-- Mic icon in center -->
+                    <div class="reactor-mic" id="reactorMic">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" y1="19" x2="12" y2="23"/>
+                            <line x1="8" y1="23" x2="16" y2="23"/>
+                        </svg>
+                    </div>
+                </div>
+                <!-- State label -->
+                <div class="reactor-state" id="reactorState">STANDBY</div>
+            </div>
+
+            <!-- Connect / Disconnect button -->
+            <button class="connect-btn" id="connectBtn">
+                <span class="connect-btn__glow"></span>
+                <span class="connect-btn__text">Initialize</span>
+            </button>
+
+            <!-- Volume control -->
+            <div class="volume-control" id="volumeControl">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="volume-icon">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                </svg>
+                <input type="range" min="0" max="100" value="80" class="volume-slider" id="volumeSlider" />
+                <span class="volume-value" id="volumeValue">80%</span>
+            </div>
+        </section>
+
+        <!-- RIGHT: Status & controls -->
+        <section class="status-panel" id="statusPanel">
+            <!-- Agent info -->
+            <div class="status-card">
+                <div class="status-card__header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="panel-icon">
+                        <path d="M12 2a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z" opacity="0.5"/>
+                        <rect x="4" y="14" width="16" height="8" rx="2"/>
+                        <line x1="9" y1="18" x2="9" y2="18"/><line x1="15" y1="18" x2="15" y2="18"/>
+                    </svg>
+                    <h3>Agent</h3>
+                </div>
+                <div class="status-card__body">
+                    <div class="info-row">
+                        <span class="info-label">Name</span>
+                        <span class="info-value" id="agentName">F.R.I.D.A.Y.</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Status</span>
+                        <span class="info-value status-badge status-badge--offline" id="agentStatus">Offline</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">LLM</span>
+                        <span class="info-value" id="agentLLM">Llama 3.3 70B</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">STT</span>
+                        <span class="info-value" id="agentSTT">Sarvam Saaras</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">TTS</span>
+                        <span class="info-value" id="agentTTS">Sarvam Bulbul</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Microphone -->
+            <div class="status-card">
+                <div class="status-card__header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="panel-icon">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                    </svg>
+                    <h3>Microphone</h3>
+                </div>
+                <div class="status-card__body">
+                    <select class="mic-select" id="micSelect">
+                        <option value="">Select microphone...</option>
+                    </select>
+                    <div class="mic-level-bar">
+                        <div class="mic-level-fill" id="micLevelFill"></div>
+                    </div>
+                    <button class="mic-toggle" id="micToggle" title="Toggle microphone">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mic-on">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mic-off" style="display:none">
+                            <line x1="1" y1="1" x2="23" y2="23"/>
+                            <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/>
+                            <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2c0 .76-.13 1.49-.35 2.17"/>
+                            <line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+                        </svg>
+                        <span>Mute</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Session info -->
+            <div class="status-card">
+                <div class="status-card__header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="panel-icon">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <h3>Session</h3>
+                </div>
+                <div class="status-card__body">
+                    <div class="info-row">
+                        <span class="info-label">Duration</span>
+                        <span class="info-value mono" id="sessionDuration">00:00:00</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Room</span>
+                        <span class="info-value mono" id="sessionRoom">—</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Latency</span>
+                        <span class="info-value mono" id="sessionLatency">— ms</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Settings modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <div class="modal__header">
+                <h2>Settings</h2>
+                <button class="modal__close" id="closeSettings">&times;</button>
+            </div>
+            <div class="modal__body">
+                <div class="setting-group">
+                    <label class="setting-label">LiveKit Server URL</label>
+                    <input type="text" class="setting-input" id="settingLivekitUrl" placeholder="wss://your-project.livekit.cloud" />
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Token Endpoint</label>
+                    <input type="text" class="setting-input" id="settingTokenUrl" placeholder="http://localhost:8080/token" />
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Room Name</label>
+                    <input type="text" class="setting-input" id="settingRoomName" value="friday-room" />
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">User Identity</label>
+                    <input type="text" class="setting-input" id="settingIdentity" value="boss" />
+                </div>
+            </div>
+            <div class="modal__footer">
+                <button class="btn-secondary" id="resetSettings">Reset</button>
+                <button class="btn-primary" id="saveSettings">Save & Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LiveKit SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/livekit-client@2.9.1/dist/livekit-client.umd.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
