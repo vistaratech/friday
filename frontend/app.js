@@ -5,7 +5,7 @@
 
 // ── Settings / State ──────────────────────────────────────────────
 const DEFAULT_SETTINGS = {
-    livekitUrl: '',
+    livekitUrl: 'wss://friday-iutge28b.livekit.cloud',
     tokenUrl: '/api/token',
     roomName: 'friday-room',
     identity: 'boss',
